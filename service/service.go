@@ -6,11 +6,11 @@ type IService interface {
 	Hello(name string) (string, error)
 }
 
-type Service struct {
+type HelloService struct {
 	Name string
 }
 
-func (s Service) Hello(name string) (string, error) {
+func (s HelloService) Hello(name string) (string, error) {
 	return fmt.Sprintf("name:%v", name), nil
 }
 

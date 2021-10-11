@@ -16,8 +16,8 @@ import (
 )
 
 func main() {
-	// 业务接口服务
-	s := service.Service{}
+	// 具体业务接口服务
+	s := service.HelloService{}
 	// 创建Endpoint
 	helloHttpEndpoint := localEndpoint.NewHttpHelloEndpoint(s)
 	helloGrpcEndpoint := localEndpoint.NewGRPCHelloEndpoint(s)
@@ -32,12 +32,12 @@ func main() {
 
 	// Grpc服务
 	go func() {
-		hs := new(service.HelloServer)
-		hs.HelloHandle = helloGrpcServer
-		var grpcHelloServer pb.HelloServer = hs
 		ls, _ := net.Listen("tcp", ":8080")
 		gs := grpc.NewServer()
-		pb.RegisterHelloServer(gs, grpcHelloServer)
+		grpcServer := service.GrpcServer{
+			HelloHandle: helloGrpcServer,
+		}
+		pb.RegisterHelloServer(gs, grpcServer)
 		gs.Serve(ls)
 	}()
 	// Http服务
