@@ -32,12 +32,12 @@ func main() {
 
 	// Grpc服务
 	go func() {
-		hs := new(service.HelloServer)
-		hs.HelloHandle = helloGrpcServer
-		var grpcHelloServer pb.HelloServer = hs
+		hs := service.HelloServer{
+			HelloHandle: helloGrpcServer,
+		}
 		ls, _ := net.Listen("tcp", ":8080")
 		gs := grpc.NewServer()
-		pb.RegisterHelloServer(gs, grpcHelloServer)
+		pb.RegisterHelloServer(gs, hs)
 		gs.Serve(ls)
 	}()
 	// Http服务
